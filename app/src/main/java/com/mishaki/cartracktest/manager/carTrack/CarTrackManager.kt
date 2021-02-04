@@ -6,6 +6,7 @@ import com.baidu.mapapi.map.MarkerOptions
 import com.baidu.mapapi.map.PolylineOptions
 import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
+import com.mishaki.cartracktest.utils.LogUtils
 import org.jetbrains.anko.AnkoAsyncContext
 import org.jetbrains.anko.async
 import java.lang.ref.WeakReference
@@ -73,6 +74,9 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val can
     }
 
     companion object {
+        init {
+            LogUtils.logGGQ("--CarTrackManager---")
+        }
         /**
          * 边行驶边画线
          */
