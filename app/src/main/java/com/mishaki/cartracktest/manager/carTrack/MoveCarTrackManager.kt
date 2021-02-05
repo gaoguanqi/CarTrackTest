@@ -5,6 +5,7 @@ import com.baidu.mapapi.map.BitmapDescriptor
 import com.baidu.mapapi.map.MapStatusUpdateFactory
 import com.baidu.mapapi.map.Marker
 import com.baidu.mapapi.model.LatLng
+import com.mishaki.cartracktest.utils.LogUtils
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread
 
@@ -14,7 +15,7 @@ import org.jetbrains.anko.uiThread
 open class MoveCarTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor) : CarTrackManager(baiduMap, carIcon) {
     protected var firstIndex = 0
     protected var secondIndex = 0
-    private var lastMarker: Marker? = null
+    protected var lastMarker: Marker? = null
     protected var moveLatLngList = ArrayList<ArrayList<LatLng>>()
 
     init {
@@ -50,6 +51,7 @@ open class MoveCarTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor) : 
                         Thread.sleep(sleepTime)
                     }
                     moveCar(moveLatLngList[i])
+                    onMoveUpScreen(actualLatLngList[i + 1])
                     lastMarker!!.rotate = carRotation(actualLatLngList[i], actualLatLngList[i + 1])
                     firstIndex = i
                     secondIndex = 0
@@ -67,10 +69,12 @@ open class MoveCarTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor) : 
     }
 
     @Throws(MoveCarStopException::class)
-    private fun moveCar(list: ArrayList<LatLng>) {
+    protected fun moveCar(list: ArrayList<LatLng>) {
+        LogUtils.logGGQ("移动段->>${list.size}")
         lastMarker?.position = list[0]
         for (i in secondIndex + 1 until list.size) {
             if (isStop) {
+                LogUtils.logGGQ("stop-->>>${isStop}")
                 throw MoveCarStopException()
             }
             Thread.sleep(sleepTime)
@@ -79,7 +83,7 @@ open class MoveCarTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor) : 
         }
     }
 
-    private fun moveCarFinish() {
+    open fun moveCarFinish() {
         firstIndex = 0
         secondIndex = 0
         isRunning = false
@@ -92,4 +96,7 @@ open class MoveCarTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor) : 
         firstIndex = 0
         secondIndex = 0
     }
+
+
+
 }

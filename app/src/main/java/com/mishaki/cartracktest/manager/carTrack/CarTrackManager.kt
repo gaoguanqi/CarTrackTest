@@ -1,9 +1,6 @@
 package com.mishaki.cartracktest.manager.carTrack
 
-import com.baidu.mapapi.map.BaiduMap
-import com.baidu.mapapi.map.BitmapDescriptor
-import com.baidu.mapapi.map.MarkerOptions
-import com.baidu.mapapi.map.PolylineOptions
+import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
 import com.mishaki.cartracktest.utils.LogUtils
@@ -15,7 +12,7 @@ import java.util.concurrent.Future
 /**
  * 车辆移动的基类
  */
-abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val canIcon: BitmapDescriptor) {
+abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val carIcon: BitmapDescriptor) {
     //随便写的,但Marker的ZIndex必须比Polyline的ZIndex大
     protected var carMarkerZIndex = -50
     protected var polylineLineZIndex = -100
@@ -89,16 +86,16 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val can
          * 仅行驶
          */
         @JvmStatic
-        fun newMoveInstance(baiduMap: BaiduMap, canIcon: BitmapDescriptor): CarTrackManager {
-            return MoveCarTrackManager(baiduMap, canIcon)
+        fun newMoveInstance(baiduMap: BaiduMap, carIcon: BitmapDescriptor): CarTrackManager {
+            return MoveCarTrackManager(baiduMap, carIcon)
         }
 
         /**
          * 先画全部的路线再行驶
          */
         @JvmStatic
-        fun newMoveHasLineInstance(baiduMap: BaiduMap, canIcon: BitmapDescriptor): CarTrackManager {
-            return MoveHasLineTrackMananger(baiduMap, canIcon)
+        fun newMoveHasLineInstance(baiduMap: BaiduMap, carIcon: BitmapDescriptor): CarTrackManager {
+            return MoveHasLineTrackMananger(baiduMap, carIcon)
         }
 
         /**
@@ -115,10 +112,15 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val can
          * 先画线,再移动.移动的距离由缩放等级来决定
          */
         @JvmStatic
-        fun newMoveHasLineOfZoomInstance(baiduMap: BaiduMap, canIcon: BitmapDescriptor, reduceTimes: Float = 4f): CarTrackManager {
-            val manager = MoveHasLineOfZoomCarTrackManager(baiduMap, canIcon)
+        fun newMoveHasLineOfZoomInstance(baiduMap: BaiduMap, carIcon: BitmapDescriptor, reduceTimes: Float = 4f): CarTrackManager {
+            val manager = MoveHasLineOfZoomCarTrackManager(baiduMap, carIcon)
             manager.reduceTimes = reduceTimes
             return manager
+        }
+
+        @JvmStatic
+        fun newMoveOnlineInstance(baiduMap: BaiduMap, carIcon: BitmapDescriptor,startIcon:BitmapDescriptor,endIcon:BitmapDescriptor):MoveOnlineTrackManager{
+            return MoveOnlineTrackManager(baiduMap, carIcon,startIcon,endIcon)
         }
     }
 
@@ -132,11 +134,19 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val can
     }
 
     protected fun generateCarMarker(firstLatLng: LatLng, secondLatLng: LatLng): MarkerOptions {
-        return MarkerOptions().anchor(0.5f, 0.5f).icon(canIcon).position(firstLatLng).rotate(carRotation(firstLatLng, secondLatLng)).zIndex(carMarkerZIndex)
+//        return MarkerOptions().anchor(0.5f, 0.5f).icon(canIcon).position(firstLatLng).rotate(carRotation(firstLatLng, secondLatLng)).zIndex(carMarkerZIndex)
+        return MarkerOptions().anchor(0.5f, 0.5f).icon(carIcon).position(firstLatLng).zIndex(carMarkerZIndex)
+    }
+
+
+    //起点 和 终点 marker
+    protected fun generateStartEndMarker(start: LatLng,end:LatLng,startIcon:BitmapDescriptor,endIcon: BitmapDescriptor): List<OverlayOptions> {
+        return listOf(MarkerOptions().position(start).icon(startIcon),MarkerOptions().position(end).icon(endIcon))
     }
 
     protected fun generatePolylineOptions(pointList: List<LatLng>): PolylineOptions {
-        return PolylineOptions().width(polylineWidth).color(polylineColor).points(pointList).zIndex(polylineLineZIndex)
+//        return PolylineOptions().width(polylineWidth).color(polylineColor).points(pointList).zIndex(polylineLineZIndex)
+        return PolylineOptions().width(polylineWidth).points(pointList).zIndex(polylineLineZIndex).customTexture(BitmapDescriptorFactory.fromAsset("line_road.png"))
     }
 
     abstract fun start()
@@ -161,7 +171,7 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val can
     fun release() {
         stop()
         asyncTask?.cancel(true)
-        canIcon.recycle()
+        carIcon.recycle()
     }
 
     interface OnMoveFinishListener {
@@ -169,4 +179,24 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val can
     }
 
     protected class MoveCarStopException : Exception()
+
+
+    //防碰壁
+    fun onMoveUpScreen(p:LatLng){
+        try {
+            baiduMap.let {
+                LogUtils.logGGQ("纠偏-->${p}")
+                val pt = it.mapStatus.targetScreen
+                val point = it.projection.toScreenLocation(p)
+                if(point.x < 0 || point.x > pt.x * 2 || point.y < 0 || point.y > pt.y * 2){
+                    val mapStatus = MapStatus.Builder().target(p).zoom(15f).build()
+                    it.animateMapStatus(MapStatusUpdateFactory.newMapStatus(mapStatus))
+                }
+            }
+        }catch (e:java.lang.Exception){
+            LogUtils.logGGQ("--onMoveCorrect--error->>${e.fillInStackTrace()}")
+        }
+    }
 }
+
+

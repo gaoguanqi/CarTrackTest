@@ -11,6 +11,7 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory
 import com.baidu.mapapi.map.MapStatus
 import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
+import com.mishaki.cartracktest.utils.LogUtils
 
 operator fun LatLng.plus(latLng: LatLng): LatLng {
     return LatLng(latitude + latLng.latitude, longitude + latLng.longitude)
@@ -50,6 +51,47 @@ fun carRotation(start: LatLng, end: LatLng): Float {
     return rotation
 }
 
+fun carRotate(start: LatLng, end: LatLng):Float{
+    val lat1 = start.latitude
+    val lon1 = start.longitude
+    val lat2 = end.latitude
+    val lon2 = end.longitude
+
+    val longitude1 = lon1
+    val longitude2 = lon2
+    val latitude1 = Math.toRadians(lat1)
+    val latitude2 = Math.toRadians(lat2)
+    val longDiff = Math.toRadians(longitude2-longitude1)
+    val y = Math.sin(longDiff)*Math.cos(latitude2)
+    val x = Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff)
+    return ((Math.toDegrees(Math.atan2(y, x))+360) % 360).toFloat()
+}
+
+// 计算经纬度旋转角度
+fun getAngle(start: LatLng, end: LatLng):Float{
+    val lat1 = start.latitude
+    val lng1 = start.longitude
+    val lat2 = end.latitude
+    val lng2 = end.longitude
+    var dRotateAngle = Math.atan2(Math.abs(lng2 - lng1), Math.abs(lat2 - lat1))
+    if (lng2 >= lng1) {
+        if (lat2 > lat1) {
+            dRotateAngle = 2 * Math.PI - dRotateAngle
+        }
+    }else{
+        if (lat2 >= lat1) {
+            dRotateAngle = Math.PI + dRotateAngle
+        }else{
+            dRotateAngle = Math.PI - dRotateAngle
+        }
+    }
+
+    dRotateAngle = dRotateAngle * 180 / Math.PI
+    val angle = dRotateAngle.toFloat()
+    LogUtils.logGGQ("--角度-->>>${angle}")
+    return angle
+
+}
 fun splitLatLng4MoveDistance(actualLatLngList: ArrayList<LatLng>, moveDistance: Int): ArrayList<ArrayList<LatLng>> {
     val moveLatLngList = ArrayList<ArrayList<LatLng>>()
     moveLatLngList.add(arrayListOf(actualLatLngList[0]))
