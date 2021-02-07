@@ -6,9 +6,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.baidu.mapapi.map.*
-import com.baidu.mapapi.model.LatLng
 import com.mishaki.cartracktest.R
-import com.mishaki.cartracktest.utils.LogUtils
 import org.jetbrains.anko.async
 
 class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: BitmapDescriptor,val startIcon:BitmapDescriptor,val endIcon:BitmapDescriptor):MoveCarTrackManager(baiduMap,carIcon), BaiduMap.OnMarkerClickListener {
@@ -58,7 +56,7 @@ class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: B
                     val overlay = baiduMap.addOverlay(MarkerOptions().position(actualLatLngList[i]).apply {
                         //添加 点击marker
                         val bundle:Bundle = Bundle()
-                        bundle.putString("id",actualLatLngList[i].latitude.toString())
+                        bundle.putString("id",actualLatLngList[i].toString())
                         this.extraInfo(bundle)
                     }.icon(gcoding))
                     overLayList.add(overlay)
