@@ -1,4 +1,4 @@
-package com.mishaki.cartracktest.manager.carTrack
+package com.mishaki.cartracktest.manager.car
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,6 +11,7 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory
 import com.baidu.mapapi.map.MapStatus
 import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
+import com.mishaki.cartracktest.entity.EbikePoint
 import com.mishaki.cartracktest.utils.LogUtils
 
 operator fun LatLng.plus(latLng: LatLng): LatLng {
@@ -109,6 +110,29 @@ fun splitLatLng4MoveDistance(actualLatLngList: ArrayList<LatLng>, moveDistance: 
                 list.add(ll)
             }
             list.add(actualLatLngList[i])
+            moveLatLngList.add(list)
+        }
+    }
+    return moveLatLngList
+}
+
+fun splitPoint4MoveDistance(actualLatLngList: ArrayList<EbikePoint>, moveDistance: Int): ArrayList<ArrayList<LatLng>> {
+    val moveLatLngList = ArrayList<ArrayList<LatLng>>()
+    moveLatLngList.add(arrayListOf(actualLatLngList[0].latLng))
+    for (i in 1 until actualLatLngList.size) {
+        val distance = DistanceUtil.getDistance(actualLatLngList[i - 1].latLng, actualLatLngList[i].latLng).toInt()
+        if (distance <= moveDistance) {
+            moveLatLngList.add(arrayListOf(actualLatLngList[i].latLng))
+        } else {
+            val count = distance / moveDistance - if (distance % moveDistance == 0) 1 else 0
+            val subLatLng = actualLatLngList[i].latLng - actualLatLngList[i - 1].latLng
+            val divLatLng = subLatLng / count
+            val list = ArrayList<LatLng>()
+            repeat(count) {
+                val ll = actualLatLngList[i - 1].latLng + (divLatLng * (it + 1))
+                list.add(ll)
+            }
+            list.add(actualLatLngList[i].latLng)
             moveLatLngList.add(list)
         }
     }

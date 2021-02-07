@@ -1,4 +1,4 @@
-package com.mishaki.cartracktest.manager.carTrack
+package com.mishaki.cartracktest.manager.car
 
 import android.content.Context
 import android.os.Bundle
@@ -156,7 +156,7 @@ class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: B
             val bundle: Bundle = it.extraInfo
             val id:String = bundle.getString("id","")
             val view = View.inflate(context,R.layout.window_marker_info,null)
-            view?.findViewById<TextView>(R.id.tv_info)?.text = id
+            view?.findViewById<TextView>(R.id.tv_addr)?.text = id
 
             // 点击关闭所有
             view?.findViewById<LinearLayout>(R.id.info_window)?.setOnClickListener {

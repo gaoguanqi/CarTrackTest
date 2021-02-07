@@ -7,18 +7,51 @@
     android:id="@+id/info_window"
     tools:ignore="ResourceName">
 
-    <TextView
-        android:id="@+id/tv_info"
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/common_black"
         android:background="@drawable/shape_radius"
-        android:textSize="12sp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        tools:text="文本" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_black"
+            android:textSize="12sp"
+            android:text="当前位置" />
+
+        <TextView
+            android:id="@+id/tv_addr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_black"
+            android:textSize="12sp"
+            tools:text="地址" />
+
+        <TextView
+            android:id="@+id/tv_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_black"
+            android:textSize="12sp"
+            tools:text="方向" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_black"
+            android:textSize="12sp"
+            tools:text="时间" />
+    </LinearLayout>
+
+
 
     <ImageView
         android:layout_width="wrap_content"

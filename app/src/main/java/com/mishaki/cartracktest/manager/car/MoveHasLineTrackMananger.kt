@@ -1,9 +1,8 @@
-package com.mishaki.cartracktest.manager.carTrack
+package com.mishaki.cartracktest.manager.car
 
 import com.baidu.mapapi.map.BaiduMap
 import com.baidu.mapapi.map.BitmapDescriptor
 import com.baidu.mapapi.map.Polyline
-import com.mishaki.cartracktest.manager.carTrack.MoveCarTrackManager
 
 /**
  * 先画全部的路线再行驶

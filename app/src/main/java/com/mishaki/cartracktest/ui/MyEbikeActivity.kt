@@ -12,27 +12,29 @@ import com.blankj.utilcode.util.ResourceUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.mishaki.cartracktest.R
 import com.mishaki.cartracktest.entity.CarEntity
+import com.mishaki.cartracktest.entity.EbikePoint
 import com.mishaki.cartracktest.manager.car.CarTrackManager
 import com.mishaki.cartracktest.manager.car.MoveOnlineTrackManager
+import com.mishaki.cartracktest.manager.ebike.AbsEbikeTrackManager
 import com.mishaki.cartracktest.utils.LogUtils
 import com.mishaki.cartracktest.utils.UIUtils
 import org.jetbrains.anko.collections.forEachWithIndex
 
-class HomeActivity : AppCompatActivity() {
+class MyEbikeActivity:AppCompatActivity() {
     private lateinit var mapView: TextureMapView
     private lateinit var baiduMap: BaiduMap
     private val carMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.marker_car) }
     private val startMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.ic_ebike_start) }
     private val endMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.ic_ebike_end) }
-    private val pointList: ArrayList<LatLng> = ArrayList()
+    private val pointList: ArrayList<EbikePoint> = ArrayList()
 
 
     private lateinit var ibtnPlay: ImageButton
     private lateinit var ibtnReplay: ImageButton
     private lateinit var ibtnFast: ImageButton
 
-    private val carTrackManager by lazy { CarTrackManager.newMoveOnlineInstance(this,baiduMap, carMarker,startMarker,endMarker).apply {
-        this.setListener(object :MoveOnlineTrackManager.CarListener{
+    private val carTrackManager by lazy { AbsEbikeTrackManager.newEbikeOnlineInstance(this,baiduMap, carMarker,startMarker,endMarker).apply {
+        this.setOnMoveListener(object : AbsEbikeTrackManager.OnMoveListener{
             override fun onStart() {
                 showToast("开始")
                 ibtnPlay.background = UIUtils.getDrawable(R.drawable.ic_map_pause)
@@ -47,8 +49,8 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-        LogUtils.logGGQ("------HomeActivity------>>>>")
+        setContentView(R.layout.activity_my_ebike)
+        LogUtils.logGGQ("------MyEbikeActivity------>>>>")
         mapView = findViewById(R.id.bmap_view)
         ibtnPlay = findViewById(R.id.ibtn_play)
         ibtnReplay = findViewById(R.id.ibtn_replay)
@@ -102,11 +104,11 @@ class HomeActivity : AppCompatActivity() {
                             return@constituting
                         }
                     }
-                    pointList.add(LatLng(item.lat, item.lng))
+                    pointList.add(EbikePoint(LatLng(item.lat, item.lng),item.addr,item.direction,item.updateTime,item.stopFlag))
                 }
 
                 LogUtils.logGGQ("---size-->${pointList.size}")
-                carTrackManager.setTrackLatLngList(pointList,pointList.size)
+                carTrackManager.setPointList(pointList,pointList.size)
                 carTrackManager.onLine()
             }
         }

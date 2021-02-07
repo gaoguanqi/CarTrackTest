@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mishaki.cartracktest.ui.HomeActivity
+import com.mishaki.cartracktest.ui.MyEbikeActivity
 import com.mishaki.cartracktest.utils.PermissionUtil
 import com.mishaki.cartracktest.utils.RequestPermission
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -43,7 +44,8 @@ class MainActivity:AppCompatActivity() {
 
     private fun launchTarget() {
         showToast("权限通过")
-        startActivity(Intent(MainActivity@this, HomeActivity::class.java))
+//        startActivity(Intent(MainActivity@this, HomeActivity::class.java))
+        startActivity(Intent(MainActivity@this, MyEbikeActivity::class.java))
         this.finish()
     }
 

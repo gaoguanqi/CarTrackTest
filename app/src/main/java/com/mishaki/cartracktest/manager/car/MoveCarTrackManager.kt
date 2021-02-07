@@ -1,4 +1,4 @@
-package com.mishaki.cartracktest.manager.carTrack
+package com.mishaki.cartracktest.manager.car
 
 import com.baidu.mapapi.map.BaiduMap
 import com.baidu.mapapi.map.BitmapDescriptor

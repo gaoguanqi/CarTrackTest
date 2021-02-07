@@ -1,4 +1,4 @@
-package com.mishaki.cartracktest.manager.carTrack
+package com.mishaki.cartracktest.manager.car
 
 import android.content.Context
 import android.os.Bundle
