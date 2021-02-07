@@ -24,7 +24,6 @@ class HomeActivity : AppCompatActivity() {
     private val carMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.marker_car) }
     private val startMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.ic_ebike_start) }
     private val endMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.ic_ebike_end) }
-//    private val carMarker by lazy { BitmapDescriptorFactory.fromResource(R.drawable.auto_car) }
     private val pointList: ArrayList<LatLng> = ArrayList()
 
 
@@ -32,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var ibtnReplay: ImageButton
     private lateinit var ibtnFast: ImageButton
 
-    private val carTrackManager by lazy { CarTrackManager.newMoveOnlineInstance(baiduMap, carMarker,startMarker,endMarker).apply {
+    private val carTrackManager by lazy { CarTrackManager.newMoveOnlineInstance(this,baiduMap, carMarker,startMarker,endMarker).apply {
         this.setListener(object :MoveOnlineTrackManager.CarListener{
             override fun onStart() {
                 showToast("开始")
@@ -88,7 +87,9 @@ class HomeActivity : AppCompatActivity() {
 
 
 
-        val carJson = ResourceUtils.readAssets2String("car.json")
+//        val carJson = ResourceUtils.readAssets2String("car.json")
+//        val carJson = ResourceUtils.readAssets2String("car_2021-02-02-000000-2021-02-05-235959.json")
+        val carJson = ResourceUtils.readAssets2String("car_2021-02-05-000000-2021-02-07-235959.json")
         val carEntity = GsonUtils.fromJson<CarEntity>(carJson, CarEntity::class.java)
 
 

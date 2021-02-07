@@ -1,10 +1,12 @@
 package com.mishaki.cartracktest.manager.carTrack
 
+import android.content.Context
+import android.widget.TextView
 import com.baidu.mapapi.map.*
 import com.mishaki.cartracktest.R
 import org.jetbrains.anko.async
 
-class MoveOnlineTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor,val startIcon:BitmapDescriptor,val endIcon:BitmapDescriptor):MoveCarTrackManager(baiduMap,carIcon) {
+class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: BitmapDescriptor,val startIcon:BitmapDescriptor,val endIcon:BitmapDescriptor):MoveCarTrackManager(baiduMap,carIcon) {
 
     private var listener:CarListener? = null
     private val overLayList:MutableList<Overlay> = mutableListOf()
@@ -46,7 +48,6 @@ class MoveOnlineTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor,val s
                     }
                     moveCar(moveLatLngList[i])
                     //每循环一小段,添加一个marker
-                    // MarkerOptions options = new MarkerOptions().position(getLatLng(runLocal.get(index))).icon(BitmapDescriptorFactory.fromResource(resource));
                     val overlay = baiduMap.addOverlay(MarkerOptions().position(actualLatLngList[i]).icon(gcoding))
                     overLayList.add(overlay)
                     onMoveUpScreen(actualLatLngList[i + 1])
@@ -64,7 +65,6 @@ class MoveOnlineTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor,val s
             }
         }
     }
-
 
     fun onLine(){
         if (isRunning) {
@@ -139,5 +139,4 @@ class MoveOnlineTrackManager(baiduMap: BaiduMap, carIcon: BitmapDescriptor,val s
         fun onStart()
         fun onFinish()
     }
-
 }

@@ -1,5 +1,6 @@
 package com.mishaki.cartracktest.manager.carTrack
 
+import android.content.Context
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
@@ -119,8 +120,8 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val car
         }
 
         @JvmStatic
-        fun newMoveOnlineInstance(baiduMap: BaiduMap, carIcon: BitmapDescriptor,startIcon:BitmapDescriptor,endIcon:BitmapDescriptor):MoveOnlineTrackManager{
-            return MoveOnlineTrackManager(baiduMap, carIcon,startIcon,endIcon)
+        fun newMoveOnlineInstance(context: Context,baiduMap: BaiduMap, carIcon: BitmapDescriptor,startIcon:BitmapDescriptor,endIcon:BitmapDescriptor):MoveOnlineTrackManager{
+            return MoveOnlineTrackManager(context,baiduMap, carIcon,startIcon,endIcon)
         }
     }
 
