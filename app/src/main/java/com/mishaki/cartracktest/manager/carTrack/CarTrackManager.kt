@@ -1,6 +1,7 @@
 package com.mishaki.cartracktest.manager.carTrack
 
 import android.content.Context
+import android.os.Bundle
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
@@ -141,8 +142,17 @@ abstract class CarTrackManager(protected val baiduMap: BaiduMap, private val car
 
 
     //起点 和 终点 marker
+    // 添加infoWindow
     protected fun generateStartEndMarker(start: LatLng,end:LatLng,startIcon:BitmapDescriptor,endIcon: BitmapDescriptor): List<OverlayOptions> {
-        return listOf(MarkerOptions().position(start).icon(startIcon),MarkerOptions().position(end).icon(endIcon))
+        return listOf(MarkerOptions().position(start).icon(startIcon).apply {
+            val bundle: Bundle = Bundle()
+            bundle.putString("id",start.toString())
+            this.extraInfo(bundle)
+        },MarkerOptions().position(end).icon(endIcon).apply {
+            val bundle: Bundle = Bundle()
+            bundle.putString("id",end.toString())
+            this.extraInfo(bundle)
+        })
     }
 
     protected fun generatePolylineOptions(pointList: List<LatLng>): PolylineOptions {

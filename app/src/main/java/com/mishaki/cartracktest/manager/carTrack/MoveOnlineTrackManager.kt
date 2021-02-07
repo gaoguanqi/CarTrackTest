@@ -1,12 +1,17 @@
 package com.mishaki.cartracktest.manager.carTrack
 
 import android.content.Context
+import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.baidu.mapapi.map.*
+import com.baidu.mapapi.model.LatLng
 import com.mishaki.cartracktest.R
+import com.mishaki.cartracktest.utils.LogUtils
 import org.jetbrains.anko.async
 
-class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: BitmapDescriptor,val startIcon:BitmapDescriptor,val endIcon:BitmapDescriptor):MoveCarTrackManager(baiduMap,carIcon) {
+class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: BitmapDescriptor,val startIcon:BitmapDescriptor,val endIcon:BitmapDescriptor):MoveCarTrackManager(baiduMap,carIcon), BaiduMap.OnMarkerClickListener {
 
     private var listener:CarListener? = null
     private val overLayList:MutableList<Overlay> = mutableListOf()
@@ -22,6 +27,8 @@ class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: B
     init {
         moveDistance = 15
         sleepTime = 20L
+        // marker 点击监听
+        baiduMap.setOnMarkerClickListener(this)
     }
 
     override fun start() {
@@ -48,7 +55,12 @@ class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: B
                     }
                     moveCar(moveLatLngList[i])
                     //每循环一小段,添加一个marker
-                    val overlay = baiduMap.addOverlay(MarkerOptions().position(actualLatLngList[i]).icon(gcoding))
+                    val overlay = baiduMap.addOverlay(MarkerOptions().position(actualLatLngList[i]).apply {
+                        //添加 点击marker
+                        val bundle:Bundle = Bundle()
+                        bundle.putString("id",actualLatLngList[i].latitude.toString())
+                        this.extraInfo(bundle)
+                    }.icon(gcoding))
                     overLayList.add(overlay)
                     onMoveUpScreen(actualLatLngList[i + 1])
                     firstIndex = i
@@ -138,5 +150,27 @@ class MoveOnlineTrackManager(val context: Context,baiduMap: BaiduMap, carIcon: B
     interface CarListener{
         fun onStart()
         fun onFinish()
+    }
+
+    // 点击marker 回调
+    override fun onMarkerClick(marker: Marker?): Boolean {
+        marker?.let {
+            val bundle: Bundle = it.extraInfo
+            val id:String = bundle.getString("id","")
+            val view = View.inflate(context,R.layout.window_marker_info,null)
+            view?.findViewById<TextView>(R.id.tv_info)?.text = id
+
+            // 点击关闭所有
+            view?.findViewById<LinearLayout>(R.id.info_window)?.setOnClickListener {
+                baiduMap.hideInfoWindow()
+            }
+            val infoWindow:InfoWindow = InfoWindow(view,marker.position,-56)
+
+            //false 点击另一个不隐藏
+            //baiduMap.showInfoWindow(infoWindow,false)
+
+            baiduMap.showInfoWindow(infoWindow)
+        }
+        return false
     }
 }
