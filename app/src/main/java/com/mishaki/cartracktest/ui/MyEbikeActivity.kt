@@ -90,25 +90,26 @@ class MyEbikeActivity:AppCompatActivity() {
 
 
 //        val carJson = ResourceUtils.readAssets2String("car.json")
-//        val carJson = ResourceUtils.readAssets2String("car_2021-02-02-000000-2021-02-05-235959.json")
-        val carJson = ResourceUtils.readAssets2String("car_2021-02-05-000000-2021-02-07-235959.json")
+        val carJson = ResourceUtils.readAssets2String("car_2021-02-02-000000-2021-02-05-235959.json")
+//        val carJson = ResourceUtils.readAssets2String("car_2021-02-05-000000-2021-02-07-235959.json")
         val carEntity = GsonUtils.fromJson<CarEntity>(carJson, CarEntity::class.java)
 
 
         carEntity?.let {
             it.data?.trajectoryList?.let { list ->
                 list.forEachWithIndex constituting@{ index, item ->
-                    if (index > 0 && index + 1 < list.size) {
-                        val nextItem = list.get(index + 1)
-                        if (item.lat == nextItem.lat && item.lng == nextItem.lng && item.direction == nextItem.direction) {
-                            return@constituting
-                        }
-                    }
+//                    if (index > 0 && index + 1 < list.size) {
+//                        val nextItem = list.get(index + 1)
+//                        if (item.lat == nextItem.lat && item.lng == nextItem.lng && item.direction == nextItem.direction) {
+//                            return@constituting
+//                        }
+//                    }
                     pointList.add(EbikePoint(LatLng(item.lat, item.lng),item.addr,item.direction,item.updateTime,item.stopFlag))
                 }
 
                 LogUtils.logGGQ("---size-->${pointList.size}")
-                carTrackManager.setPointList(pointList,pointList.size)
+                // 如果 distance >= 1 方法内部自动过滤 重复点
+                carTrackManager.setPointList(pointList,1)
                 carTrackManager.onLine()
             }
         }
