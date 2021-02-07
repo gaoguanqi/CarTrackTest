@@ -98,18 +98,19 @@ class MyEbikeActivity:AppCompatActivity() {
         carEntity?.let {
             it.data?.trajectoryList?.let { list ->
                 list.forEachWithIndex constituting@{ index, item ->
-//                    if (index > 0 && index + 1 < list.size) {
-//                        val nextItem = list.get(index + 1)
-//                        if (item.lat == nextItem.lat && item.lng == nextItem.lng && item.direction == nextItem.direction) {
-//                            return@constituting
-//                        }
-//                    }
+                    //过滤重复点 当经度 纬度 和 角度相同 时
+                    if (index > 0 && index + 1 < list.size) {
+                        val nextItem = list.get(index + 1)
+                        if (item.lat == nextItem.lat && item.lng == nextItem.lng && item.direction == nextItem.direction) {
+                            return@constituting
+                        }
+                    }
                     pointList.add(EbikePoint(LatLng(item.lat, item.lng),item.addr,item.direction,item.updateTime,item.stopFlag))
                 }
 
                 LogUtils.logGGQ("---size-->${pointList.size}")
                 // 如果 distance >= 1 方法内部自动过滤 重复点
-                carTrackManager.setPointList(pointList,1)
+                carTrackManager.setPointList(pointList,pointList.size)
                 carTrackManager.onLine()
             }
         }

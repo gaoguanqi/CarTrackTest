@@ -43,8 +43,11 @@ class EbikeOnlineManager(context: Context,baiduMap: BaiduMap,carIcon: BitmapDesc
         }
         isRunning = true
         isPlay = true
-        if(overLayList.isNotEmpty()){
-            this.baiduMap.removeOverLays(overLayList)
+        //如果不是暂停后再播放,清除之前的makrer 标记
+        if(!isPause){
+            if(overLayList.isNotEmpty()){
+                this.baiduMap.removeOverLays(overLayList)
+            }
         }
         this.listener?.onStart()
         asyncTask = threadController.async {
@@ -158,9 +161,6 @@ class EbikeOnlineManager(context: Context,baiduMap: BaiduMap,carIcon: BitmapDesc
 
     fun onResume(){
         this.start()
-        if(overLayList.isNotEmpty()){
-            overLayList.clear()
-        }
     }
 
 
