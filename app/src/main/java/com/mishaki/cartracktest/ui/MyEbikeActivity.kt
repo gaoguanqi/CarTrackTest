@@ -51,8 +51,11 @@ class MyEbikeActivity:AppCompatActivity() {
             }
 
             override fun onProgress(currentSize: Int, totalSize: Int) {
-                LogUtils.logGGQ("当前进度->${currentSize}--总进度->${totalSize}")
-                npBar.progress = currentSize
+                runOnUiThread {
+                    LogUtils.logGGQ("当前进度->${currentSize}--总进度->${totalSize}")
+                    npBar.progress = currentSize
+                    tvNum.text = "${currentSize}/${totalSize}"
+                }
             }
         })
     } }
