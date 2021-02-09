@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_container"
@@ -17,41 +17,91 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp"
-            android:orientation="horizontal">
-            <ImageButton
-                android:id="@+id/ibtn_play"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_map_play" />
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_vertical"
-                android:background="#E0E0E0" />
-            <ImageButton
-                android:id="@+id/ibtn_replay"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_map_replay" />
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_vertical"
-                android:background="#E0E0E0" />
-            <ImageButton
-                android:id="@+id/ibtn_fast"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/ic_map_fast"/>
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/common_white"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:text="进度" />
+
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/np_bar"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/tv_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/common_white"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:text="0/0" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/ibtn_play"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_map_play" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="#E0E0E0" />
+
+                <ImageButton
+                    android:id="@+id/ibtn_replay"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_map_replay" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="#E0E0E0" />
+
+                <ImageButton
+                    android:id="@+id/ibtn_fast"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/ic_map_fast" />
+            </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

@@ -55,6 +55,8 @@ abstract class AbsEbikeTrackManager(val context: Context,protected val baiduMap:
         pointList.add(list[0])
         (1 until list.size).filter { DistanceUtil.getDistance(list[it - 1].latLng, list[it].latLng) > distance }.mapTo(pointList) { list[it] }
         onSetTrackLatLngListFinish()
+
+        LogUtils.logGGQ("总数量：${pointList.size}")
     }
 
     protected open fun onSetTrackLatLngListFinish() {}
@@ -152,6 +154,8 @@ abstract class AbsEbikeTrackManager(val context: Context,protected val baiduMap:
     interface OnMoveListener {
         fun onStart()
         fun onFinish()
+
+        fun onProgress(currentSize:Int = 0,totalSize:Int = 0)
     }
 
     protected class MoveCarStopException : Exception()

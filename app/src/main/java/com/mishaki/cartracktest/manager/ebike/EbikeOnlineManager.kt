@@ -63,6 +63,7 @@ class EbikeOnlineManager(context: Context,baiduMap: BaiduMap,carIcon: BitmapDesc
                         Thread.sleep(sleepTime)
                     }
                     moveCar(moveLatLngList[i])
+                    listener?.onProgress((i+1+1),pointList.size)
                     //每循环一小段,添加一个marker
 
                     val overlay = baiduMap.addOverlay(MarkerOptions().position(pointList[i].latLng).apply {
