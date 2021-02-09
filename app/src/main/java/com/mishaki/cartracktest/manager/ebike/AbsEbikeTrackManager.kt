@@ -165,7 +165,8 @@ abstract class AbsEbikeTrackManager(val context: Context,protected val baiduMap:
                 val pt = it.mapStatus.targetScreen
                 val point = it.projection.toScreenLocation(p)
                 if(point.x < 0 || point.x > pt.x * 2 || point.y < 0 || point.y > pt.y * 2){
-                    val mapStatus = MapStatus.Builder().target(p).zoom(15f).build()
+//                    val mapStatus = MapStatus.Builder().target(p).zoom(15f).build()
+                    val mapStatus = MapStatus.Builder().target(p).build()
                     it.animateMapStatus(MapStatusUpdateFactory.newMapStatus(mapStatus))
                 }
             }

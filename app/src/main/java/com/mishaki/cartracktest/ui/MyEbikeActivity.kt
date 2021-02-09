@@ -90,8 +90,9 @@ class MyEbikeActivity:AppCompatActivity() {
 
 
 //        val carJson = ResourceUtils.readAssets2String("car.json")
-        val carJson = ResourceUtils.readAssets2String("car_2021-02-02-000000-2021-02-05-235959.json")
+//        val carJson = ResourceUtils.readAssets2String("car_2021-02-02-000000-2021-02-05-235959.json")
 //        val carJson = ResourceUtils.readAssets2String("car_2021-02-05-000000-2021-02-07-235959.json")
+        val carJson = ResourceUtils.readAssets2String("car_2021-02-05-000000-2021-02-06-235959.json")
         val carEntity = GsonUtils.fromJson<CarEntity>(carJson, CarEntity::class.java)
 
 
